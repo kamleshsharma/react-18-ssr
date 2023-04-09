@@ -3,12 +3,12 @@ import path from 'path'
 import React from 'react'
 import { renderToPipeableStream } from 'react-dom/server'
 import App from '../app/app'
-import { StoreProvider, getStore } from '../app/fakeStore'
+import { StoreProvider, getFakeStore } from '../app/fakeStore'
 
 export async function renderer(req: Request, res: Response) {
   console.log('Starting renderer for ', req.url)
   let hasError = false
-  const store = getStore()
+  const store = getFakeStore()
   const stream = renderToPipeableStream(
     <React.StrictMode>
       <StoreProvider store={store}>
@@ -19,10 +19,12 @@ export async function renderer(req: Request, res: Response) {
       bootstrapScripts: [path.join('build', 'client', 'main.js')],
       onShellReady() {
         console.log('onShellReady')
-        // here you will usually set response header as soon as the shell is ready
-        // We wont be passing anything here as there is posiblity that 
-        // some suspense might fail and you want to update the header to error
-        // to avoid caching error on the CDN ro browser
+        /**
+         * here you will usually set response header as soon as the shell is ready
+         * We wont be passing anything here as there is posiblity that 
+         * some suspense might fail and you want to update the header to error
+         * to avoid caching error on the CDN ro browser
+         */
       },
       onAllReady() {
         /**
@@ -55,8 +57,10 @@ export async function renderer(req: Request, res: Response) {
         `)
       },
       onError(err: any) {
-        // We can still pass the state on error and 
-        // fallback to client side rendering
+        /**
+         * We can still pass the state on error and 
+         * fallback to client side rendering
+         */
         const updatedState = store.getState()
         const updatedStateStringify = JSON.stringify(updatedState)
         console.log('onError', err)
@@ -77,6 +81,9 @@ export async function renderer(req: Request, res: Response) {
       }
     }
   )
+  /**
+   * Setting timeout for worse case
+   */
   setTimeout(() => {
     stream.abort()
     res.end(`<div>Error Timeout</div>`)

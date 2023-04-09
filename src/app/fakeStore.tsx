@@ -1,8 +1,8 @@
 import React, { useContext } from 'react'
 export const StoreContext = React.createContext<{ getState: any, updateStore: (data: any) => void }>({ getState: {}, updateStore: (data) => { } })
 
-export const getStore = () => {
-    let state = {}
+export const getFakeStore = (initialState = {}) => {
+    let state = initialState
     return {
         getState: () => state,
         updateStore: (data: any) => {
