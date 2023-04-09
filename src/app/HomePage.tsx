@@ -11,11 +11,12 @@ export const HomePage = () => {
             if (state.loaded) {
                 res(true)
             }
+            // delaying the response
             setTimeout(() => {
                 console.log('HomePage > Promise resolved ', state)
                 setDataToStore({ loaded: true })
                 res(true)
-            }, 5000)
+            }, 3000)
         })
     }, [])
     useDataSuspense(getData, state.loaded)

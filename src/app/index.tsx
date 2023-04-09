@@ -4,7 +4,7 @@ import { getFakeStore, StoreProvider } from './fakeStore';
 
 const rootElement = document?.getElementById("app") ?? document.body
 const store = getFakeStore((window as any).__INIT_STATE__ || {})
-hydrateRoot(rootElement, <StoreProvider value={store}>
+hydrateRoot(rootElement, <StoreProvider store={store}>
     <App />
 </StoreProvider>
 )

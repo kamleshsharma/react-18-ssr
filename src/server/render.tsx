@@ -87,5 +87,5 @@ export async function renderer(req: Request, res: Response) {
   setTimeout(() => {
     stream.abort()
     res.end(`<div>Error Timeout</div>`)
-  }, 1000)
+  }, 10000)
 }
